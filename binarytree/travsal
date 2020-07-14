@@ -1,0 +1,144 @@
+#include<vector>
+#include<stack>
+#include<iostream>
+#include<queue>
+using namespace std;
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL){}
+};
+class Solution
+{
+public:
+    vector<int> ans;
+//......前序遍历
+//           1.迭代法
+    vector<int> inorderTraversal(TreeNode *root)
+    {
+        stack<TreeNode *> st;
+        while (root || st.size()) //节点为空，且栈为空时，到达最后一个右节点，结束
+        {
+            while (root) //如果没到最左节点
+            { 
+                ans.push_back(root->val); //记录数据
+                st.push(root);     //把当前节点入栈
+                root = root->left; //指向左节点
+            }
+            root = st.top()->right;         //指向这个顶点的右子节点，重复上面的操作    
+            st.pop();                 //出栈  
+        }
+        return ans;
+    }
+//           2.递归法
+    vector<int> inorderTraversal(TreeNode *root)
+    {
+        if (root)
+        {  
+            ans.push_back(root->val);
+            inorderTraversal(root->left);         
+            inorderTraversal(root->right);
+        }
+        return ans;
+    }
+
+//.......中序遍历
+//       1.迭代法
+    vector<int> inorderTraversal(TreeNode *root)
+    {
+        stack<TreeNode *> st;
+        while (root || st.size())//节点为空，且栈为空时，到达最后一个右节点，结束
+        {
+            while (root)//如果没到最左节点
+            {
+                st.push(root);//把当前节点入栈
+                root = root->left;//指向左节点
+            }
+            root = st.top();//到了最左节点
+            ans.push_back(root->val);//记录数据
+            st.pop();//出栈
+            root = root->right;//指向这个顶点的右子节点，重复上面的操作 
+        }
+        return ans;
+    }  
+//      2.递归法
+    vector<int> inorderTraversal(TreeNode *root)
+    { 
+        if (root)
+        {
+            inorderTraversal(root->left);        
+            ans.push_back(root->val);
+            inorderTraversal(root->right);
+        }            
+        return ans;
+    }
+    //........后序遍历
+    //       1.迭代法
+    vector<int> postorderTraversal(TreeNode *root)
+    {
+        stack<TreeNode *> st;
+        vector<int> ans;
+        TreeNode *last = NULL;
+        while (root || st.size())
+        {
+            while (root)//寻找最左
+            {
+                st.push(root);
+                root = root->left;
+            }
+            root = st.top();
+            if (root->right == NULL || root->right == last)//如果右子树已经遍历
+            {
+                ans.push_back(root->val);//把根节点存进去
+                last = root;
+                st.pop();//出栈
+                root = NULL;//防止死循环，越过第一步
+            }
+            else
+            {
+                root = root->right;//右子树没遍历先去遍历右子树
+            }
+        }
+        return ans;
+    }
+    //      2.递归法
+    vector<int> postorderTraversal(TreeNode *root)
+    {
+        if (root)
+        {
+            inorderTraversal(root->left);          
+            inorderTraversal(root->right);
+            ans.push_back(root->val);
+        }
+        return ans;
+    }
+//..........层次遍历
+    vector<vector<int> > levelOrder(TreeNode *root)
+    {
+        vector<vector<int> > ans;
+        if (!root)
+            return ans;
+        queue<TreeNode *> qu;
+        qu.push(root);
+        int size = qu.size();
+        while (!qu.empty())
+        {
+            vector<int> a;
+            for (int i = 0; i < size; i++)
+            {
+                root = qu.front();
+                qu.pop();
+                a.push_back(root->val);
+                if (root->left)
+                    qu.push(root->left);
+                if (root->right)
+                    qu.push(root->right);
+            }
+            ans.push_back(a);
+            size = qu.size();
+        }
+        return ans;
+    }
+};
