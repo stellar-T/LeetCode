@@ -1,0 +1,39 @@
+//染色法
+class Solution
+{
+public:
+    vector<int> color;
+    bool res;
+    int RED = 1, GREEN = -1, UNCOLORED = 0;
+    bool isBipartite(vector<vector<int> > &graph)
+    {
+        int n = graph.size();
+        color.assign(n, UNCOLORED);
+        res = true;
+        for (int i = 0; i < n && res; ++i)
+        {
+            if (color[i] == UNCOLORED)
+            {
+                dfs(i, RED, graph);
+            }
+        }
+        return res;
+    }
+    void dfs(int now, int thiscolor, vector<vector<int> > &graph)
+    {
+        int n = graph[now].size();
+        for (int i = 0; i < n; i++)
+        {
+            if (color[graph[now][i]] == UNCOLORED)
+            {
+                color[graph[now][i]] = -thiscolor;
+            }
+            else if (-thiscolor != color[graph[now][i]])
+            {
+                res = false;
+                return;
+            }
+        }
+        return;
+    }
+};

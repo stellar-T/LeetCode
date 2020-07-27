@@ -10,14 +10,14 @@ struct TreeNode
     TreeNode *right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
-vector<vector<int> > levelOrder(TreeNode *root)
+//bfs
+int maxDepth(TreeNode *root)
 {
-    vector<vector<int> > ans;
     if (!root)
-        return ans;
+        return 0;
     queue<TreeNode *> qu;
     qu.push(root);
-    int size = qu.size();
+    int size = qu.size(),cot=0;
     while (!qu.empty())
     {
         vector<int> a;
@@ -25,14 +25,37 @@ vector<vector<int> > levelOrder(TreeNode *root)
         {
             root = qu.front();
             qu.pop();
-            a.push_back(root->val);
             if (root->left)
                 qu.push(root->left);
             if (root->right)
                 qu.push(root->right);
         }
-        ans.push_back(a);
         size = qu.size();
+        cot++;
     }
-    return ans;
+    return cot;
 }
+//递归
+class Solution
+{
+public:        
+    int cot;
+    int maxDepth(TreeNode *root)
+    {
+        if (!root)
+            return 0;
+        cot = 0;
+        max(root, cot);
+        return cot;
+    }
+    int max(TreeNode *root,int a)
+    {
+        if (!root)
+            return 0;
+        if(a==cot)
+            cot++;
+        max(root->left, a + 1);
+        max(root->right, a + 1);
+        return 0;
+    }
+};

@@ -1,0 +1,67 @@
+#include <vector>
+#include <stack>
+#include <iostream>
+#include <queue>
+using namespace std;
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+//中后
+class Solution
+{
+public:
+    unordered_map<int, int> mp;
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
+    {
+        TreeNode *root = NULL;
+        for (int i = 0; i < inorder.size(); i++)
+            mp[inorder[i]] = i;
+        if (inorder.empty())
+            return root;
+        return mybuildtree(inorder, postorder, 0, postorder.size() - 1, 0, inorder.size() - 1);
+    }
+    TreeNode *mybuildtree(vector<int> &inorder, vector<int> &postorder, int po_start, int po_back, int in_start, int in_back)
+    {
+        TreeNode *root = new TreeNode;
+        if (po_back < po_start || in_start > in_back)
+            return NULL;
+        root->val = postorder[po_back];
+        if (po_back == po_start)
+            return root;
+        int index = mp[postorder[po_back]];
+        root->left = mybuildtree(inorder, postorder, po_start, po_start + index - 1 - in_start, in_start, index - 1);
+        root->right = mybuildtree(inorder, postorder, po_start + index - in_start, po_back - 1, index + 1, in_back);
+        return root;
+    }
+};
+//前中
+class Solution
+{
+    unordered_map<int, int> mp;
+    public:
+        TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+        {
+            for (int i = 0; i < inorder.size(); i++)
+                mp[inorder[i]] = i;
+            if(preorder.empty())
+                return NULL;
+            return mybuildtree(inorder, preorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+        }
+};
+TreeNode *mybuildtree(vector<int> &inorder, vector<int> &postorder, int pre_start, int pre_back, int in_start, int in_back)
+{
+    TreeNode *root = new TreeNode;
+    if (pre_back < pre_start || in_start > in_back)
+        return NULL;
+    root->val = postorder[pre_start];
+    if (pre_back == pre_start)
+        return root;
+    int index = mp[prestorder[pre_front]];
+    root->left = mybuildtree(inorder, postorder, pre_start+1, pre_start + index - in_start, in_start, index - 1);
+    root->right = mybuildtree(inorder, postorder, pre_start + 1+index - in_start, pre_back, index + 1, in_back);
+    return root;
+}
