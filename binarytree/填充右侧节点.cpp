@@ -3,7 +3,7 @@
 #include <iostream>
 #include <queue>
 struct Node {
-   int val;
+    int val;
   Node *left;
   Node *right;
   Node *next;

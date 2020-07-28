@@ -1,8 +1,3 @@
-#include <vector>
-#include <stack>
-#include <iostream>
-#include <queue>
-using namespace std;
 struct TreeNode
 {
     int val;
@@ -41,7 +36,7 @@ public:
 //递归
 class Solution
 {
-public:        
+public:
     int cot;
     int maxDepth(TreeNode *root)
     {
@@ -51,11 +46,11 @@ public:
         max(root, cot);
         return cot;
     }
-    int max(TreeNode *root,int a)
+    int max(TreeNode *root, int a)
     {
         if (!root)
             return 0;
-        if(a==cot)
+        if (a == cot)
             cot++;
         max(root->left, a + 1);
         max(root->right, a + 1);
